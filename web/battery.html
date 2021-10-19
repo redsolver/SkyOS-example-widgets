@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery Widget</title>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            font-family: sans-serif;
+        }
+
+        #output {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+        }
+
+        #levelIndicator {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 255, 0, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="levelIndicator"></div>
+
+    <div id="output">??&nbsp;%</div>
+
+    <script>
+        const payload = JSON.parse(decodeURI(window.location.hash.substring(1)));
+        const theme = payload.theme;
+        const foregroundColor = theme.foregroundColor;
+
+        document.body.style.color = foregroundColor;
+
+        if ('getBattery' in navigator) {
+            const outputDiv = document.getElementById('output');
+            const levelIndicatorDiv = document.getElementById('levelIndicator');
+            navigator.getBattery().then(function (battery) {
+                function updateAllBatteryInfo() {
+                    /* updateChargeInfo(); */
+                    updateLevelInfo();
+                    /* updateChargingInfo();
+                    updateDischargingInfo(); */
+                }
+                updateAllBatteryInfo();
+
+                /* battery.addEventListener('chargingchange', function () {
+                    updateChargeInfo();
+                });
+                function updateChargeInfo() {
+                    console.log("Battery charging? "
+                        + (battery.charging ? "Yes" : "No"));
+                } */
+
+                battery.addEventListener('levelchange', function () {
+                    updateLevelInfo();
+                });
+                function updateLevelInfo() {
+                    outputDiv.innerHTML = Math.round(battery.level * 100) + "&nbsp;%"
+                    levelIndicatorDiv.style.width = battery.level * 100 + "%"
+
+                    console.log("Battery level: "
+                        + battery.level * 100 + "%");
+                }
+
+                /* battery.addEventListener('chargingtimechange', function () {
+                    updateChargingInfo();
+                });
+                function updateChargingInfo() {
+                    console.log("Battery charging time: "
+                        + battery.chargingTime + " seconds");
+                }
+
+                battery.addEventListener('dischargingtimechange', function () {
+                    updateDischargingInfo();
+                });
+                function updateDischargingInfo() {
+                    console.log("Battery discharging time: "
+                        + battery.dischargingTime + " seconds");
+                } */
+
+            });
+
+        } else {
+            console.error('Battery Status API not supported in this browser');
+        }
+    </script>
+</body>
+
+</html>

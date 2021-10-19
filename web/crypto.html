@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Widget</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            font-family: sans-serif;
+            cursor: pointer;
+        }
+
+        #output {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+        }
+
+        #price {
+            font-size: 16px;
+        }
+
+        #title {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="output">
+        <div id="title">Loading...</div>
+
+        <div id="price"></div>
+    </div>
+    <script>
+
+        const payload = JSON.parse(decodeURI(window.location.hash.substring(1)));
+        const theme = payload.theme;
+        const foregroundColor = theme.foregroundColor;
+        document.body.style.color = foregroundColor;
+
+        const config = payload.config;
+
+        document.body.addEventListener('click', function () {
+            window.parent.postMessage({ 'skyos': true, 'name': window.name, 'action': 'launch', 'data': { 'title': `TradingView • ${config.coingeckoName}`, 'url': `https://www.tradingview.com/widgetembed/?symbol=${config.tradingviewSymbol}&interval=H&symboledit=1&saveimage=1&toolbarbg=f1f3f6&theme=dark&style=1` } }, '*')
+        });
+
+        document.getElementById('title').textContent = config.coingeckoName;
+
+        function updatePriceData() {
+            console.log('update crypto price data')
+            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${config.coingeckoId}&vs_currencies=${config.coingeckoVsCurrency}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('price').innerHTML = data[config.coingeckoId][config.coingeckoVsCurrency] + "&nbsp;$"
+                });
+        }
+
+        updatePriceData();
+
+        var intervalId = window.setInterval(updatePriceData, 600000);
+    </script>
+</body>
+
+</html>

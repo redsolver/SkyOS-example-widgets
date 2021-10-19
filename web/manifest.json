@@ -1,0 +1,51 @@
+{
+    "orientation": "any",
+    "name": "SkyOS example widgets",
+    "description": "Some example widgets for SkyOS",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#1ed660",
+    "background_color": "#000000",
+    "display": "standalone",
+    "skylink": "AQCw7EXe3yOKGGAN6_fx7gAP_CKKFnsYqE4JfrFXA88yYA",
+    "skydata": {
+        "widgets": [
+            {
+                "name": "Simple battery widget",
+                "description": "This widget shows your current battery level in % and visually. This widget doesn't work in Firefox.",
+                "url": "/battery.html",
+                "preview_image": "/assets/images/battery_widget.png",
+                "widget_type": "dock",
+                "width": "70px"
+            },
+            {
+                "name": "Crypto price widget",
+                "description": "This widget shows the current price of a selected cryptocurrency",
+                "url": "/crypto.html",
+                "preview_image": "/assets/images/crypto_widget.png",
+                "widget_type": "dock",
+                "width": "102px",
+                "min_width": "50px",
+                "max_width": "300px",
+                "defaultConfig": {
+                    "coingeckoId": "siacoin",
+                    "coingeckoSymbol": "sc",
+                    "coingeckoName": "Siacoin",
+                    "coingeckoVsCurrency": "usd",
+                    "tradingviewSymbol": "SCUSD"
+                },
+                "configUrl": "/crypto_config.html"
+            }
+        ]
+    }
+}

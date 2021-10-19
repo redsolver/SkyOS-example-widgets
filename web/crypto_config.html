@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Widget Config</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            font-family: sans-serif;
+        }
+
+        div {
+            cursor: pointer;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="output">
+        <div id="title" style="padding: 32px;">Select a coin</div>
+
+        <div id="list"></div>
+    </div>
+    <script>
+
+        const payload = JSON.parse(decodeURI(window.location.hash.substring(1)));
+        const theme = payload.theme;
+        const foregroundColor = theme.foregroundColor;
+        document.body.style.color = foregroundColor;
+
+        fetch(`https://api.coingecko.com/api/v3/coins/list`)
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById('list');
+
+                for (const coin of data) {
+                    const div = document.createElement('div');
+                    div.textContent = `${coin.name} (${coin.symbol})`;
+                    div.addEventListener('click', function () {
+                        window.parent.postMessage({
+                            'skyos': true, 'name': window.name, 'action': 'updateWidgetConfig', 'data': {
+                                'widgetId': payload.widgetId, 'config': {
+                                    "coingeckoId": coin.id,
+                                    "coingeckoSymbol": coin.id.symbol,
+                                    "coingeckoName": coin.name,
+                                    "coingeckoVsCurrency": "usd",
+                                    "tradingviewSymbol": coin.symbol.toUpperCase() + "USD"
+                                }
+                            }
+                        }, '*')
+                    })
+                    list.appendChild(div);
+                }
+            });
+
+    </script>
+</body>
+
+</html>
