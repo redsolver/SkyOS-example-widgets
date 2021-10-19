@@ -37,14 +37,14 @@
                 "width": "102px",
                 "min_width": "50px",
                 "max_width": "300px",
-                "defaultConfig": {
+                "default_config": {
                     "coingeckoId": "siacoin",
                     "coingeckoSymbol": "sc",
                     "coingeckoName": "Siacoin",
                     "coingeckoVsCurrency": "usd",
                     "tradingviewSymbol": "SCUSD"
                 },
-                "configUrl": "/crypto_config.html"
+                "config_url": "/crypto_config.html"
             }
         ]
     }
